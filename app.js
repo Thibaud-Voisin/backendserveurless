@@ -83,7 +83,7 @@ app.get('/get_cart', async (req, res) => {
 app.get('/info_avance', async (req, res) => {
   const ress = await pool.query('SELECT * FROM status ORDER BY id DESC LIMIT 1');
   if (ress.rows.length == 0) {
-    res.send(0);
+    res.sendStatus(400);
   }
   else {
     res.send('' + ress.rows[0].int_value);
