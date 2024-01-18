@@ -7,17 +7,66 @@ const port = 3000;
 const cors = require('cors')
 
 const pool = new Pool({
-  user: 'admin',
-  host: 'localhost',
-  database: 'serveurless',
-  password: 'password',
-  port: 5433,
+  user: 'jqxfhsosvnhrzg',
+  host: 'ec2-34-241-82-91.eu-west-1.compute.amazonaws.com',
+  database: 'daqrala6mpk85l',
+  password: '4b71ae0f78e5e154bf2ea5e86d739fcd6e8df00842c2f77b145bc3a3d34efcd4',
+  port: 5432,
 });
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });``
 
 app.use(cors())
+
+app.get('/init-database', async (req, res) => {
+  try {
+    const client = await pool.connect();
+
+    try {
+      // Check and initialize cart table
+      await initializeTable(client, 'cart', `
+        CREATE TABLE cart (
+          id SERIAL PRIMARY KEY,
+          string_value VARCHAR(255) NOT NULL
+        )
+      `);
+
+      // Check and initialize status table
+      await initializeTable(client, 'status', `
+        CREATE TABLE status (
+          id SERIAL PRIMARY KEY,
+          int_value VARCHAR(255) NOT NULL
+        )
+      `);
+
+      res.send('Databases initialized successfully');
+    } finally {
+      // Release the client back to the pool
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error initializing databases:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+async function initializeTable(client, tableName, createTableQuery) {
+  // Check if the table exists
+  const checkTableQuery = `SELECT to_regclass('${tableName}') as table_exists`;
+  const result = await client.query(checkTableQuery);
+  const tableExists = result.rows[0].table_exists;
+
+  if (tableExists) {
+    // Table exists, drop it
+    const dropTableQuery = `DROP TABLE ${tableName}`;
+    await client.query(dropTableQuery);
+  }
+
+  // Create the table
+  await client.query(createTableQuery);
+}
+
 
 app.get('/get_cart', async (req, res) => {
   const ress = await pool.query('SELECT * FROM cart ORDER BY id DESC LIMIT 1');
