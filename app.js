@@ -44,14 +44,12 @@ async function initializeDatabase() {
         )
       `);
 
-      res.send('Databases initialized successfully');
     } finally {
       // Release the client back to the pool
       client.release();
     }
   } catch (error) {
     console.error('Error initializing databases:', error);
-    res.status(500).send('Internal Server Error');
   }
 };
 
