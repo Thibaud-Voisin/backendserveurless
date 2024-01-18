@@ -23,7 +23,7 @@ app.get('/test', (req, res) => {
   res.send('ok');
 });
 
-app.get('/init-database', async (req, res) => {
+async function initializeDatabase() {
   try {
     const client = await pool.connect();
 
@@ -53,7 +53,7 @@ app.get('/init-database', async (req, res) => {
     console.error('Error initializing databases:', error);
     res.status(500).send('Internal Server Error');
   }
-});
+};
 
 async function initializeTable(client, tableName, createTableQuery) {
   // Check if the table exists
@@ -119,4 +119,11 @@ app.post('/update_status', async (req, res) => {
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
+});
+
+
+initializeDatabase().then(() => {
+  console.log('Initialization complete.');
+}).catch((error) => {
+  console.error('Initialization failed:', error);
 });
