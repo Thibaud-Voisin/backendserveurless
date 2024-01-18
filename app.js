@@ -75,7 +75,16 @@ app.get('/get_cart', async (req, res) => {
   if (ress.rows.length == 0) {
     res.sendStatus(400);
   }
-  res.send(JSON.parse(ress.rows[0].string_value));
+  else
+  {
+  try {
+    let val = JSON.parse(ress.rows[0].string_value);
+    res.send(val);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(400);
+  }
+}
 });
 
 app.get('/info_avance', async (req, res) => {
