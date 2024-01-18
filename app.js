@@ -32,7 +32,7 @@ app.get('/init-database', async (req, res) => {
       await initializeTable(client, 'cart', `
         CREATE TABLE cart (
           id SERIAL PRIMARY KEY,
-          string_value VARCHAR(255) NOT NULL
+          string_value VARCHAR(2555555) NOT NULL
         )
       `);
 
@@ -40,7 +40,7 @@ app.get('/init-database', async (req, res) => {
       await initializeTable(client, 'status', `
         CREATE TABLE status (
           id SERIAL PRIMARY KEY,
-          int_value VARCHAR(255) NOT NULL
+          int_value VARCHAR(2555555) NOT NULL
         )
       `);
 
