@@ -3,7 +3,7 @@ const app = express();
 const multer = require('multer');
 const { Pool } = require('pg');
 app.use(express.json());
-const port = 3000;
+const port = process.env.PORT || 80
 const cors = require('cors')
 
 const pool = new Pool({
