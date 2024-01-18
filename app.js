@@ -7,11 +7,10 @@ const port = process.env.PORT || 80
 const cors = require('cors')
 
 const pool = new Pool({
-  user: 'jqxfhsosvnhrzg',
-  host: 'ec2-34-241-82-91.eu-west-1.compute.amazonaws.com',
-  database: 'daqrala6mpk85l',
-  password: '4b71ae0f78e5e154bf2ea5e86d739fcd6e8df00842c2f77b145bc3a3d34efcd4',
-  port: 5432,
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false, // In a production environment, you should use a valid certificate.
+  },
 });
 
 const storage = multer.memoryStorage();
