@@ -18,6 +18,11 @@ const upload = multer({ storage: storage });``
 
 app.use(cors())
 
+app.get('/test', (req, res) => {
+  console.log('test');
+  res.send('ok');
+});
+
 app.get('/init-database', async (req, res) => {
   try {
     const client = await pool.connect();
